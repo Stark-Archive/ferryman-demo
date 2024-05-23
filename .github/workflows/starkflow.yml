@@ -1,0 +1,38 @@
+name: Stark Web Audit
+run-name: ${{ github.event.inputs.display-title }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      token:
+        description: 'Stark Token'
+        required: true
+      display-title:
+        description: 'Display title'
+        required: true
+
+jobs:
+  accessibility-audit:
+    runs-on: ubuntu-latest
+
+    name: Accessibility Audit
+    steps:
+      - name: Checkout code
+        id: code-checkout
+        uses: actions/checkout@v3
+
+      - name: Audit
+        id: stark
+        uses: stark-contrast/accessibility-check-action@develop
+        with:
+            # Most of the following values are simply shell commands. You can use these to set up the container as needed for your app
+            token: ${{ github.event.inputs.token }} # The action will use this to send an audit report back to Stark.
+            setup: 'npm i' # [Optional] Set up the container. Install some tools, export variables, etc.
+            serve: 'npm run dev' # [Optional] Tell us how to serve your app.
+            wait_time: 5000 # [Required, default 5000] Milliseconds to wait before your app can start serving
+            urls: |-
+              http://localhost:3000/
+              http://localhost:3000/posts/hello-world
+              http://localhost:3000/posts/preview
+              http://localhost:3000/posts/dynamic-routing
+            cleanup: '' # [Optional] After scanning, the command running in serve step is auto terminated. Use this to run any cleanup commands.
