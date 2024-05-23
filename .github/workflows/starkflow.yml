@@ -23,6 +23,10 @@ jobs:
 
       - name: Audit
         id: stark
+        env:
+          STARK_REPORT_URL: https://staging.getstark.co/api/cli-webhooks/scan-result/:scanId
+          STARK_DETAILS_URL: https://staging.getstark.co/api/cli-webhooks/scan-details/:scanId
+          STARK_COMPLETION_URL: https://staging.getstark.co/api/cli-webhooks/end-scan/:scanId
         uses: stark-contrast/accessibility-check-action@develop
         with:
             # Most of the following values are simply shell commands. You can use these to set up the container as needed for your app
